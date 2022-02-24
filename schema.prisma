@@ -1,0 +1,21 @@
+// database
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// generator
+generator client {
+  provider = "prisma-client-py"
+  interface = "sync"
+}
+
+// data models
+model File {
+    id Int @id @default(autoincrement())
+    deb String 
+    ownerID String
+    name String @unique
+    downloads Int @default(0)
+    private Boolean @default(false)
+}
