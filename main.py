@@ -1,7 +1,14 @@
 from prisma import Prisma
-from flask import Flask
+from flask import Flask, request
 from flask_restful import Api, Resource
 import json
+import multiprocessing
+from base64 import b64encode
+
+def gen_OWNERID():
+    print(multiprocessing.cpu_count())
+
+gen_OWNERID()
 
 prisma = Prisma()
 app = Flask(__name__)
@@ -17,7 +24,20 @@ class File(Resource):
         if file == None:
             return {"error": "Not Found"}
         else:
-            return {"file": file.deb}
+            return {"file": str(file.deb)}
+    
+    def post(self, name):
+        content = request.json
+        try:
+            prisma.file.create(data={
+                'deb': content["deb"],
+                'ownerID': content["ownerID"],
+                'name': name,
+                'private': content["private"]
+            })
+            return {"done": "File added"}
+        except Exception as e:
+            return {"error": f"Error occured, {e}"}
 
 api.add_resource(File, '/deb/<name>')
 

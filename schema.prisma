@@ -13,7 +13,7 @@ generator client {
 // data models
 model File {
     id Int @id @default(autoincrement())
-    deb String 
+    deb Bytes @db.LongBlob
     ownerID String
     name String @unique
     downloads Int @default(0)
